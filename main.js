@@ -8,24 +8,19 @@ let isArrowPressed = false;
 let isMoving = false;
 
 document.addEventListener("keydown", (event) => {
-  if (event.key.startsWith("Arrow")) {
-    isArrowPressed = true;
-  }
+	if (event.key.startsWith("Arrow")) {
+		isArrowPressed = true;
+	}
 });
 
 document.addEventListener("keyup", (event) => {
-  if (event.key.startsWith("Arrow")) {
-    isArrowPressed = false;
-  }
+	if (event.key.startsWith("Arrow")) {
+		isArrowPressed = false;
+	}
 });
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(
-  75,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  1000
-);
+const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 scene.add(camera);
 
 const renderer = new THREE.WebGLRenderer();
@@ -62,12 +57,12 @@ bridge.position.y -= 3.5;
 background.push(bridge);
 
 for (let i = 0; i < MAX_STAR; i++) {
-  const star = addStar();
-  background.push(star);
+	const star = addStar();
+	background.push(star);
 }
 
 background.forEach((object) => {
-  scene.add(object);
+	scene.add(object);
 });
 
 let spherePosition = new THREE.Vector3();
@@ -79,63 +74,65 @@ let pressed = document.getElementById("arrowPressed");
 let moving = document.getElementById("moving");
 
 function animate() {
-  requestAnimationFrame(animate);
+	requestAnimationFrame(animate);
 
-  spherePosition.add(sphereVelocity);
-  sphere.position.copy(spherePosition);
+	spherePosition.add(sphereVelocity);
+	sphere.position.copy(spherePosition);
 
-  cameraTarget.copy(sphere.position);
-  cameraTarget.add(cameraOffset);
-  camera.position.lerp(cameraTarget, 0.1); // Smoothly interpolate camera position
-  camera.lookAt(sphere.position); // Look at sphere
+	cameraTarget.copy(sphere.position);
+	cameraTarget.add(cameraOffset);
+	camera.position.lerp(cameraTarget, 0.1); // Smoothly interpolate camera position
+	camera.lookAt(sphere.position); // Look at sphere
 
-  controls.update;
-  speedDisplay.textContent = sphereVelocity.length().toFixed(2);
-  xSpeedDisplay.textContent = sphereVelocity.x.toFixed(2);
-  zSpeedDisplay.textContent = sphereVelocity.z.toFixed(2);
-  pressed.textContent = isArrowPressed ? "true" : "false";
-  moving.textContent = isMoving ? "true" : "false";
+	controls.update;
+	speedDisplay.textContent = sphereVelocity.length().toFixed(2);
+	xSpeedDisplay.textContent = sphereVelocity.x.toFixed(2);
+	zSpeedDisplay.textContent = sphereVelocity.z.toFixed(2);
+	pressed.textContent = isArrowPressed ? "true" : "false";
+	moving.textContent = isMoving ? "true" : "false";
+
+	/* AQUI EL JUGADOR CONTROLA A LA ESFERA */
 
   // Moviendose hacia la derecha
-  if (!isArrowPressed && sphereVelocity.x > 0 && isMoving) {
-    sphereVelocity.x -= 0.001;
-    if (Math.abs(sphereVelocity.x) < 0.005) {
-      sphereVelocity.x = 0;
-      if (Math.abs(sphereVelocity.z) == 0) {
-        isMoving = false;
-      }
-    }
-  }
+	if (!isArrowPressed && sphereVelocity.x > 0 && isMoving) {
+		sphereVelocity.x -= 0.001;
+		if (Math.abs(sphereVelocity.x) < 0.005) {
+			sphereVelocity.x = 0;
+			if (Math.abs(sphereVelocity.z) == 0) {
+				isMoving = false;
+			}
+		}
+	}
   // Moviendose hacia atras
-  if (!isArrowPressed && sphereVelocity.z > 0 && isMoving) {
-    sphereVelocity.z -= 0.001;
-    if (Math.abs(sphereVelocity.z) < 0.005) {
-      sphereVelocity.z = 0;
-      if (Math.abs(sphereVelocity.x) == 0) {
-        isMoving = false;
-      }
-    }
-  }
+	if (!isArrowPressed && sphereVelocity.z > 0 && isMoving) {
+		sphereVelocity.z -= 0.001;
+		if (Math.abs(sphereVelocity.z) < 0.005) {
+			sphereVelocity.z = 0;
+			if (Math.abs(sphereVelocity.x) == 0) {
+				isMoving = false;
+			}
+		}
+	}
   // Moviendose hacia la izquierda
-  if (!isArrowPressed && sphereVelocity.x < 0 && isMoving) {
-    sphereVelocity.x += 0.001;
-    if (Math.abs(sphereVelocity.x) < 0.005) {
-      sphereVelocity.x = 0;
-      if (Math.abs(sphereVelocity.z) == 0) {
-        isMoving = false;
-      }
-    }
-  }
+	if (!isArrowPressed && sphereVelocity.x < 0 && isMoving) {
+		sphereVelocity.x += 0.001;
+		if (Math.abs(sphereVelocity.x) < 0.005) {
+			sphereVelocity.x = 0;
+			if (Math.abs(sphereVelocity.z) == 0) {
+				isMoving = false;
+			}
+		}
+	}
   // Moviendose hacia adelante
-  if (!isArrowPressed && sphereVelocity.z < 0 && isMoving) {
-    sphereVelocity.z += 0.001;
-    if (Math.abs(sphereVelocity.z) < 0.005) {
-      sphereVelocity.z = 0;
-      if (Math.abs(sphereVelocity.x) == 0) {
-        isMoving = false;
-      }
-    }
-  }
+	if (!isArrowPressed && sphereVelocity.z < 0 && isMoving) {
+		sphereVelocity.z += 0.001;
+		if (Math.abs(sphereVelocity.z) < 0.005) {
+			sphereVelocity.z = 0;
+			if (Math.abs(sphereVelocity.x) == 0) {
+				isMoving = false;
+			}
+		}
+	}
 
   renderer.render(scene, camera);
 }
@@ -146,70 +143,70 @@ const speedDecay = 0.95;
 
 // Function to handle arrow key presses
 function handleKeyPress(event) {
-  const acceleration = 0.01; // Acceleration value
-  const maxSpeed = 0.5; // Maximum speed
-  isArrowPressed = true;
-  isMoving = true;
+	const acceleration = 0.01; // Acceleration value
+	const maxSpeed = 0.5; // Maximum speed
+	isArrowPressed = true;
+	isMoving = true;
 
-  switch (event.key) {
-    case "ArrowUp":
-      sphereVelocity.z -= acceleration;
-      break;
-    case "ArrowDown":
-      sphereVelocity.z += acceleration;
-      break;
-    case "ArrowLeft":
-      sphereVelocity.x -= acceleration;
-      break;
-    case "ArrowRight":
-      sphereVelocity.x += acceleration;
-      break;
-  }
+	switch (event.key) {
+		case "ArrowUp":
+			sphereVelocity.z -= acceleration;
+		break;
+		case "ArrowDown":
+			sphereVelocity.z += acceleration;
+		break;
+		case "ArrowLeft":
+			sphereVelocity.x -= acceleration;
+		break;
+		case "ArrowRight":
+			sphereVelocity.x += acceleration;
+		break;
+	}
 
   // Limit velocity to maximum speed
-  sphereVelocity.clampLength(-maxSpeed, maxSpeed);
+	sphereVelocity.clampLength(-maxSpeed, maxSpeed);
 }
 
 // Function to handle arrow key releases
 function handleKeyRelease(event) {
-  const threshold = 0.05; // Adjust this threshold value as needed
+	const threshold = 0.05; // Adjust this threshold value as needed
 
-  switch (event.key) {
-    case "ArrowUp":
-      if (Math.abs(sphereVelocity.z) < threshold) {
-        sphereVelocity.z = 0;
-      } else {
-        sphereVelocity.z *= speedDecay;
-      }
-      break;
-    case "ArrowDown":
-      if (Math.abs(sphereVelocity.z) < threshold) {
-        sphereVelocity.z = 0;
-      } else {
-        sphereVelocity.z *= speedDecay;
-      }
-      break;
-    case "ArrowLeft":
-      if (Math.abs(sphereVelocity.x) < threshold) {
-        sphereVelocity.x = 0;
-      } else {
-        sphereVelocity.x *= speedDecay;
-      }
-      break;
-    case "ArrowRight":
-      if (Math.abs(sphereVelocity.x) < threshold) {
-        sphereVelocity.x = 0;
-      } else {
-        sphereVelocity.x *= speedDecay;
-      }
-      break;
+	switch (event.key) {
+		case "ArrowUp":
+			if (Math.abs(sphereVelocity.z) < threshold) {
+				sphereVelocity.z = 0;
+			} else {
+				sphereVelocity.z *= speedDecay;
+			}
+		break;
+		case "ArrowDown":
+			if (Math.abs(sphereVelocity.z) < threshold) {
+				sphereVelocity.z = 0;
+			} else {
+				sphereVelocity.z *= speedDecay;
+			}
+		break;
+		case "ArrowLeft":
+			if (Math.abs(sphereVelocity.x) < threshold) {
+				sphereVelocity.x = 0;
+			} else {
+				sphereVelocity.x *= speedDecay;
+			}
+		break;
+		case "ArrowRight":
+			if (Math.abs(sphereVelocity.x) < threshold) {
+				sphereVelocity.x = 0;
+			} else {
+				sphereVelocity.x *= speedDecay;
+			}
+		break;
   }
 
   // If velocity magnitude is very small, set velocity to zero
-  if (sphereVelocity.lengthSq() < threshold * threshold) {
-    sphereVelocity.set(0, 0, 0);
-  }
-  isArrowPressed = false;
+	if (sphereVelocity.lengthSq() < threshold * threshold) {
+		sphereVelocity.set(0, 0, 0);
+	}
+	isArrowPressed = false;
 }
 
 // Add event listeners for key presses and releases
