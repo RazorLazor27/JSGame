@@ -19,3 +19,11 @@ export function addSphere(){
 
     return sphere
 }
+
+export function addBridge(){
+    const geometry = new THREE.BoxGeometry(1000 ,1 ,500);
+    const material = new THREE.MeshStandardMaterial( { color: 0x5f5f5f} );
+    const bridge = new THREE.Mesh( geometry, material);
+
+    return bridge;
+}
