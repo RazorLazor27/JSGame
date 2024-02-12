@@ -1,39 +1,45 @@
-import * as THREE from 'three';
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
-import { addStar, addSphere, addBridge } from './src/geometry.js';
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { addStar, addSphere, addBridge } from "./src/geometry.js";
+import { detectMovement } from "./src/keyListeners.js";
 
-const MAX_STAR = 200; 
+const MAX_STAR = 200;
 let isArrowPressed = false;
 let isMoving = false;
 
-document.addEventListener('keydown', (event) => {
-  if (event.key.startsWith('Arrow')) {
-      isArrowPressed = true;
+document.addEventListener("keydown", (event) => {
+  if (event.key.startsWith("Arrow")) {
+    isArrowPressed = true;
   }
 });
 
-document.addEventListener('keyup', (event) => {
-  if (event.key.startsWith('Arrow')) {
-      isArrowPressed = false;
+document.addEventListener("keyup", (event) => {
+  if (event.key.startsWith("Arrow")) {
+    isArrowPressed = false;
   }
 });
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-scene.add( camera );
+const camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
+scene.add(camera);
 
 const renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
 const pointLight = new THREE.PointLight(0xffffff);
-pointLight.position.set(5,5,5);
+pointLight.position.set(5, 5, 5);
 
 const ambientLight = new THREE.AmbientLight(0xffffff);
-scene.add( pointLight, ambientLight );
+scene.add(pointLight, ambientLight);
 
 const lightHelper = new THREE.PointLightHelper(pointLight);
-const gridHelper = new THREE.GridHelper(200,50);
+const gridHelper = new THREE.GridHelper(200, 50);
 
 scene.add(lightHelper, gridHelper);
 
@@ -55,23 +61,25 @@ const bridge = addBridge();
 bridge.position.y -= 3.5;
 background.push(bridge);
 
-for (let i = 0; i < MAX_STAR; i++){
+for (let i = 0; i < MAX_STAR; i++) {
   const star = addStar();
   background.push(star);
 }
 
-background.forEach( object => { scene.add( object ); })
+background.forEach((object) => {
+  scene.add(object);
+});
 
 let spherePosition = new THREE.Vector3();
 let sphereVelocity = new THREE.Vector3();
-let speedDisplay = document.getElementById('speed-value');
+let speedDisplay = document.getElementById("speed-value");
 let xSpeedDisplay = document.getElementById("x-speed");
 let zSpeedDisplay = document.getElementById("z-speed");
 let pressed = document.getElementById("arrowPressed");
 let moving = document.getElementById("moving");
 
 function animate() {
-	requestAnimationFrame( animate );
+  requestAnimationFrame(animate);
 
   spherePosition.add(sphereVelocity);
   sphere.position.copy(spherePosition);
@@ -87,53 +95,49 @@ function animate() {
   zSpeedDisplay.textContent = sphereVelocity.z.toFixed(2);
   pressed.textContent = isArrowPressed ? "true" : "false";
   moving.textContent = isMoving ? "true" : "false";
-  
+
   // Moviendose hacia la derecha
-  if (!isArrowPressed && sphereVelocity.x > 0 && isMoving){
+  if (!isArrowPressed && sphereVelocity.x > 0 && isMoving) {
     sphereVelocity.x -= 0.001;
-    if (Math.abs(sphereVelocity.x) < 0.005 ){
+    if (Math.abs(sphereVelocity.x) < 0.005) {
       sphereVelocity.x = 0;
-      if (Math.abs(sphereVelocity.z) == 0){
+      if (Math.abs(sphereVelocity.z) == 0) {
         isMoving = false;
       }
     }
   }
   // Moviendose hacia atras
-  if (!isArrowPressed && sphereVelocity.z > 0 && isMoving){
+  if (!isArrowPressed && sphereVelocity.z > 0 && isMoving) {
     sphereVelocity.z -= 0.001;
     if (Math.abs(sphereVelocity.z) < 0.005) {
       sphereVelocity.z = 0;
-      if (Math.abs(sphereVelocity.x) == 0){
+      if (Math.abs(sphereVelocity.x) == 0) {
         isMoving = false;
       }
     }
   }
   // Moviendose hacia la izquierda
-  if (!isArrowPressed && sphereVelocity.x < 0 && isMoving){
+  if (!isArrowPressed && sphereVelocity.x < 0 && isMoving) {
     sphereVelocity.x += 0.001;
-    if(Math.abs(sphereVelocity.x) < 0.005){
+    if (Math.abs(sphereVelocity.x) < 0.005) {
       sphereVelocity.x = 0;
-      if (Math.abs(sphereVelocity.z) == 0){
+      if (Math.abs(sphereVelocity.z) == 0) {
         isMoving = false;
       }
     }
   }
   // Moviendose hacia adelante
-  if (!isArrowPressed && sphereVelocity.z < 0 && isMoving){
+  if (!isArrowPressed && sphereVelocity.z < 0 && isMoving) {
     sphereVelocity.z += 0.001;
-    if(Math.abs(sphereVelocity.z) < 0.005){
+    if (Math.abs(sphereVelocity.z) < 0.005) {
       sphereVelocity.z = 0;
-      if (Math.abs(sphereVelocity.x) == 0){
+      if (Math.abs(sphereVelocity.x) == 0) {
         isMoving = false;
       }
     }
   }
 
-
-
-  
-
-	renderer.render( scene, camera );
+  renderer.render(scene, camera);
 }
 animate();
 
@@ -146,20 +150,20 @@ function handleKeyPress(event) {
   const maxSpeed = 0.5; // Maximum speed
   isArrowPressed = true;
   isMoving = true;
-  
+
   switch (event.key) {
-      case 'ArrowUp':
-          sphereVelocity.z -= acceleration;
-          break;
-      case 'ArrowDown':
-          sphereVelocity.z += acceleration;
-          break;
-      case 'ArrowLeft':
-          sphereVelocity.x -= acceleration;
-          break;
-      case 'ArrowRight':
-          sphereVelocity.x += acceleration;
-          break;
+    case "ArrowUp":
+      sphereVelocity.z -= acceleration;
+      break;
+    case "ArrowDown":
+      sphereVelocity.z += acceleration;
+      break;
+    case "ArrowLeft":
+      sphereVelocity.x -= acceleration;
+      break;
+    case "ArrowRight":
+      sphereVelocity.x += acceleration;
+      break;
   }
 
   // Limit velocity to maximum speed
@@ -171,43 +175,43 @@ function handleKeyRelease(event) {
   const threshold = 0.05; // Adjust this threshold value as needed
 
   switch (event.key) {
-      case 'ArrowUp':
-          if (Math.abs(sphereVelocity.z) < threshold) {
-              sphereVelocity.z = 0;
-          } else {
-              sphereVelocity.z *= speedDecay;
-          }
-          break;
-      case 'ArrowDown':
-          if (Math.abs(sphereVelocity.z) < threshold) {
-              sphereVelocity.z = 0;
-          } else {
-              sphereVelocity.z *= speedDecay;
-          }
-          break;
-      case 'ArrowLeft':
-          if (Math.abs(sphereVelocity.x) < threshold) {
-              sphereVelocity.x = 0;
-          } else {
-              sphereVelocity.x *= speedDecay;
-          }
-          break;
-      case 'ArrowRight':
-          if (Math.abs(sphereVelocity.x) < threshold) {
-              sphereVelocity.x = 0;
-          } else {
-              sphereVelocity.x *= speedDecay;
-          }
-          break;
+    case "ArrowUp":
+      if (Math.abs(sphereVelocity.z) < threshold) {
+        sphereVelocity.z = 0;
+      } else {
+        sphereVelocity.z *= speedDecay;
+      }
+      break;
+    case "ArrowDown":
+      if (Math.abs(sphereVelocity.z) < threshold) {
+        sphereVelocity.z = 0;
+      } else {
+        sphereVelocity.z *= speedDecay;
+      }
+      break;
+    case "ArrowLeft":
+      if (Math.abs(sphereVelocity.x) < threshold) {
+        sphereVelocity.x = 0;
+      } else {
+        sphereVelocity.x *= speedDecay;
+      }
+      break;
+    case "ArrowRight":
+      if (Math.abs(sphereVelocity.x) < threshold) {
+        sphereVelocity.x = 0;
+      } else {
+        sphereVelocity.x *= speedDecay;
+      }
+      break;
   }
 
   // If velocity magnitude is very small, set velocity to zero
   if (sphereVelocity.lengthSq() < threshold * threshold) {
-      sphereVelocity.set(0, 0, 0);
+    sphereVelocity.set(0, 0, 0);
   }
   isArrowPressed = false;
 }
 
 // Add event listeners for key presses and releases
-document.addEventListener('keydown', handleKeyPress);
-document.addEventListener('keyup', handleKeyRelease);
+document.addEventListener("keydown", handleKeyPress);
+document.addEventListener("keyup", handleKeyRelease);
