@@ -7,11 +7,21 @@
     <title>Vite App</title>
     <style>
       body { margin: 0;}
+      #speed-display {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 5px 10px;
+            font-size: 16px;
+      }
     </style>
 
   </head>
   <body>
 
+    <div id="speed-display">Speed: <span id="speed-value"> 0 </span></div>
     <script type="module" src="/main.js"></script>
 
   </body>
