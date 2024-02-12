@@ -118,6 +118,7 @@ function animate() {
       }
     }
   }
+  // Moviendose hacia adelante
   if (!isArrowPressed && sphereVelocity.z < 0 && isMoving){
     sphereVelocity.z += 0.001;
     if(Math.abs(sphereVelocity.z) < 0.005){
