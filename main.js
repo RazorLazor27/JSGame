@@ -88,33 +88,43 @@ function animate() {
   pressed.textContent = isArrowPressed ? "true" : "false";
   moving.textContent = isMoving ? "true" : "false";
   
-
+  // Moviendose hacia la derecha
   if (!isArrowPressed && sphereVelocity.x > 0 && isMoving){
     sphereVelocity.x -= 0.001;
     if (Math.abs(sphereVelocity.x) < 0.005 ){
       sphereVelocity.x = 0;
-      isMoving = false;
+      if (Math.abs(sphereVelocity.z) == 0){
+        isMoving = false;
+      }
     }
   }
+  // Moviendose hacia atras
   if (!isArrowPressed && sphereVelocity.z > 0 && isMoving){
     sphereVelocity.z -= 0.001;
     if (Math.abs(sphereVelocity.z) < 0.005) {
       sphereVelocity.z = 0;
-      isMoving = false;
+      if (Math.abs(sphereVelocity.x) == 0){
+        isMoving = false;
+      }
     }
   }
+  // Moviendose hacia la izquierda
   if (!isArrowPressed && sphereVelocity.x < 0 && isMoving){
     sphereVelocity.x += 0.001;
     if(Math.abs(sphereVelocity.x) < 0.005){
       sphereVelocity.x = 0;
-      isMoving = false;
+      if (Math.abs(sphereVelocity.z) == 0){
+        isMoving = false;
+      }
     }
   }
   if (!isArrowPressed && sphereVelocity.z < 0 && isMoving){
     sphereVelocity.z += 0.001;
     if(Math.abs(sphereVelocity.z) < 0.005){
       sphereVelocity.z = 0;
-      isMoving = false;
+      if (Math.abs(sphereVelocity.x) == 0){
+        isMoving = false;
+      }
     }
   }
 
