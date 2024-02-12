@@ -65,6 +65,10 @@ background.forEach( object => { scene.add( object ); })
 let spherePosition = new THREE.Vector3();
 let sphereVelocity = new THREE.Vector3();
 let speedDisplay = document.getElementById('speed-value');
+let xSpeedDisplay = document.getElementById("x-speed");
+let zSpeedDisplay = document.getElementById("z-speed");
+let pressed = document.getElementById("arrowPressed");
+let moving = document.getElementById("moving");
 
 function animate() {
 	requestAnimationFrame( animate );
@@ -79,32 +83,37 @@ function animate() {
 
   controls.update;
   speedDisplay.textContent = sphereVelocity.length().toFixed(2);
+  xSpeedDisplay.textContent = sphereVelocity.x.toFixed(2);
+  zSpeedDisplay.textContent = sphereVelocity.z.toFixed(2);
+  pressed.textContent = isArrowPressed ? "true" : "false";
+  moving.textContent = isMoving ? "true" : "false";
+  
 
-  if (isArrowPressed == false && sphereVelocity.x > 0){
+  if (!isArrowPressed && sphereVelocity.x > 0 && isMoving){
     sphereVelocity.x -= 0.001;
     if (Math.abs(sphereVelocity.x) < 0.005 ){
       sphereVelocity.x = 0;
       isMoving = false;
     }
   }
-  if (isArrowPressed == false && sphereVelocity.z > 0){
+  if (!isArrowPressed && sphereVelocity.z > 0 && isMoving){
     sphereVelocity.z -= 0.001;
     if (Math.abs(sphereVelocity.z) < 0.005) {
       sphereVelocity.z = 0;
       isMoving = false;
     }
   }
-  if (isArrowPressed = false && sphereVelocity.x < 0){
+  if (!isArrowPressed && sphereVelocity.x < 0 && isMoving){
     sphereVelocity.x += 0.001;
     if(Math.abs(sphereVelocity.x) < 0.005){
       sphereVelocity.x = 0;
       isMoving = false;
     }
   }
-  if (isArrowPressed = false && sphereVelocity.z < 0){
+  if (!isArrowPressed && sphereVelocity.z < 0 && isMoving){
     sphereVelocity.z += 0.001;
-    if(Math.abs(sphereVelocity.x) < 0.005){
-      sphereVelocity.x = 0;
+    if(Math.abs(sphereVelocity.z) < 0.005){
+      sphereVelocity.z = 0;
       isMoving = false;
     }
   }
@@ -124,7 +133,8 @@ const speedDecay = 0.95;
 function handleKeyPress(event) {
   const acceleration = 0.01; // Acceleration value
   const maxSpeed = 0.5; // Maximum speed
-  //isArrowPressed = true;
+  isArrowPressed = true;
+  isMoving = true;
   
   switch (event.key) {
       case 'ArrowUp':
@@ -184,7 +194,7 @@ function handleKeyRelease(event) {
   if (sphereVelocity.lengthSq() < threshold * threshold) {
       sphereVelocity.set(0, 0, 0);
   }
-  //isArrowPressed = false;
+  isArrowPressed = false;
 }
 
 // Add event listeners for key presses and releases
