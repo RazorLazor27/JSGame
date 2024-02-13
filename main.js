@@ -1,9 +1,10 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { addStar, addSphere, addBridge } from "./src/geometry.js";
-import { detectMovement } from "./src/keyListeners.js";
+import { addStar, addSphere, addBridge, addEnemies } from "./src/geometry.js";
+// import { detectMovement } from "./src/keyListeners.js";
 
 const MAX_STAR = 200;
+const MAX_ENEM = 5;
 let isArrowPressed = false;
 let isMoving = false;
 
@@ -27,6 +28,9 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+// const controls = setupCameraControls(camera, renderer.domElement);
+
+
 const pointLight = new THREE.PointLight(0xffffff);
 pointLight.position.set(5, 5, 5);
 
@@ -43,7 +47,11 @@ const controls = new OrbitControls(camera, renderer.domElement);
 const background = [];
 
 const sphere = addSphere();
+
+
 background.push(sphere);
+
+// Aqui va la configuracion de la camara para que quede en 3ra persona 
 
 const cameraDistance = 12; // Distance from sphere
 const cameraOffset = new THREE.Vector3(0, 10, cameraDistance); // Offset from sphere
@@ -52,6 +60,8 @@ const cameraLookAt = new THREE.Vector3(0, 0, 0); // Look at origin
 camera.position.copy(cameraOffset); // Set initial camera position
 camera.lookAt(cameraLookAt); // Look at origin
 
+// Creacion del mapa en cuestion 
+
 const bridge = addBridge();
 bridge.position.y -= 3.5;
 background.push(bridge);
@@ -59,6 +69,11 @@ background.push(bridge);
 for (let i = 0; i < MAX_STAR; i++) {
 	const star = addStar();
 	background.push(star);
+}
+
+for (let i = 0; i < MAX_ENEM; i++) {
+	const enem = addEnemies();
+	background.push(enem);
 }
 
 background.forEach((object) => {
@@ -73,11 +88,18 @@ let zSpeedDisplay = document.getElementById("z-speed");
 let pressed = document.getElementById("arrowPressed");
 let moving = document.getElementById("moving");
 
+const axesHelper = new THREE.AxesHelper(7);
+scene.add( axesHelper );
+
+// Aqui va lo que conocemos como el GameLoop
+
 function animate() {
 	requestAnimationFrame(animate);
 
 	spherePosition.add(sphereVelocity);
 	sphere.position.copy(spherePosition);
+
+	axesHelper.position.copy(spherePosition);
 
 	cameraTarget.copy(sphere.position);
 	cameraTarget.add(cameraOffset);
@@ -132,6 +154,23 @@ function animate() {
 				isMoving = false;
 			}
 		}
+	}
+
+
+	// Intento de rotacion en base al movimiento del jugador
+
+	if (moving){
+		sphere.rotation.x += sphereVelocity.z * 0.8;
+		sphere.rotation.z -= sphereVelocity.x * 0.8;
+	} else if (sphere.rotation.x == 0 && sphere.rotation.z != 0){
+		sphere.rotation.x = 0;
+		
+	} else if (sphere.rotation.z == 0 && sphere.rotation.x != 0){
+		sphere.rotation.z = 0
+		
+	} else {
+		sphere.rotation.x = 0;
+		sphere.rotation.z = 0;
 	}
 
   renderer.render(scene, camera);
@@ -207,6 +246,13 @@ function handleKeyRelease(event) {
 		sphereVelocity.set(0, 0, 0);
 	}
 	isArrowPressed = false;
+}
+
+function setupCameraControls(camera, rendererElement) {
+    const controls = new THREE.OrbitControls(camera, rendererElement);
+    controls.enableDamping = true; // Add damping for smoother controls
+    controls.dampingFactor = 0.25; // Adjust damping factor as needed
+    return controls;
 }
 
 // Add event listeners for key presses and releases

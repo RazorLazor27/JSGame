@@ -1,5 +1,8 @@
 import * as THREE from 'three';
+/*
+    ACTUALMENTE NO SE ESTA OCUPANDO ESTE ARCHIVO PARA NADA
 
+*/
 const DEACCELERATION = 0.001;
 
 export function detectMovement(arrowPressed, moving, velocityX, velocityZ) {
