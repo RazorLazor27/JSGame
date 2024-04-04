@@ -107,9 +107,9 @@ function animate() {
 	camera.lookAt(sphere.position); // Look at sphere
 
 	controls.update;
-	speedDisplay.textContent = sphereVelocity.length().toFixed(2);
-	xSpeedDisplay.textContent = sphereVelocity.x.toFixed(2);
-	zSpeedDisplay.textContent = sphereVelocity.z.toFixed(2);
+	speedDisplay.textContent = sphereVelocity.length().toFixed(5);
+	xSpeedDisplay.textContent = sphereVelocity.x.toFixed(5);
+	zSpeedDisplay.textContent = sphereVelocity.z.toFixed(5);
 	pressed.textContent = isArrowPressed ? "true" : "false";
 	moving.textContent = isMoving ? "true" : "false";
 
